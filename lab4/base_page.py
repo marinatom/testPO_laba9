@@ -27,11 +27,11 @@ class BasePage:
             return wait.until(EC.element_to_be_clickable(locator))
         except TimeoutException:
             return None
-    
     def is_element_visible(self, locator, timeout=5):
         element = self.find_element(locator, timeout)
         return element is not None and element.is_displayed()
     
     def get_element_text(self, locator):
         element = self.find_element(locator)
+
         return element.text.strip() if element else ""
