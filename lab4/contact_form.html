@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контактная форма</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .required::after {
+            content: " *";
+            color: red;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        
+        .error {
+            border-color: red;
+        }
+        
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 3px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+        }
+        
+        .checkbox-label input {
+            width: auto;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Контактная форма</h1>
+        
+        <form id="contactForm">
+            <div class="form-group">
+                <label for="fullName" class="required">ФИО</label>
+                <input type="text" id="fullName" name="fullName" placeholder="Иванов Иван Иванович">
+                <div class="error-message" id="fullNameError">Поле обязательно для заполнения. Минимум 5 символов.</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email" class="required">Email</label>
+                <input type="email" id="email" name="email" placeholder="example@domain.com">
+                <div class="error-message" id="emailError">Введите корректный email адрес.</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="topic" class="required">Тема обращения</label>
+                <select id="topic" name="topic">
+                    <option value="">Выберите тему</option>
+                    <option value="general">Общий вопрос</option>
+                    <option value="technical">Техническая проблема</option>
+                    <option value="billing">Вопрос по оплате</option>
+                    <option value="feedback">Обратная связь</option>
+                    <option value="other">Другое</option>
+                </select>
+                <div class="error-message" id="topicError">Выберите тему обращения.</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="message">Сообщение (необязательно)</label>
+                <textarea id="message" name="message" rows="4" placeholder="Опишите вашу проблему или вопрос..."></textarea>
+                <div class="error-message" id="messageError">Если заполняете, минимум 10 символов.</div>
+            </div>
+            
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="agreement" name="agreement">
+                    Я согласен на обработку персональных данных
+                </label>
+                <div class="error-message" id="agreementError">Необходимо согласие.</div>
+            </div>
+            
+            <button type="submit">Отправить сообщение</button>
+        </form>
+        
+        <div class="success-message" id="successMessage">
+            <h3>Сообщение успешно отправлено!</h3>
+            <p>Мы свяжемся с вами в ближайшее время.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('contactForm');
+            const successMessage = document.getElementById('successMessage');
+
+            function validateField(field, errorElement, validationFn) {
+                const value = field.value.trim();
+                const isValid = validationFn(value);
+                
+                if (!isValid) {
+                    field.classList.add('error');
+                    errorElement.style.display = 'block';
+                    return false;
+                } else {
+                    field.classList.remove('error');
+                    errorElement.style.display = 'none';
+                    return true;
+                }
+            }
+
+            const validators = {
+                fullName: function(value) {
+                    return value.length >= 5;
+                },
+                email: function(value) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return emailRegex.test(value);
+                },
+                topic: function(value) {
+                    return value !== '';
+                },
+                message: function(value) {
+                    if (value === '') return true;
+                    return value.length >= 10;
+                },
+                agreement: function(value) {
+                    return document.getElementById('agreement').checked;
+                }
+            };
+
+            document.getElementById('fullName').addEventListener('blur', function() {
+                validateField(this, document.getElementById('fullNameError'), validators.fullName);
+            });
+            
+            document.getElementById('email').addEventListener('blur', function() {
+                validateField(this, document.getElementById('emailError'), validators.email);
+            });
+            
+            document.getElementById('topic').addEventListener('change', function() {
+                validateField(this, document.getElementById('topicError'), validators.topic);
+            });
+            
+            document.getElementById('message').addEventListener('blur', function() {
+                validateField(this, document.getElementById('messageError'), validators.message);
+            });
+            
+            document.getElementById('agreement').addEventListener('change', function() {
+                validateField(this, document.getElementById('agreementError'), validators.agreement);
+            });
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const isFullNameValid = validateField(
+                    document.getElementById('fullName'), 
+                    document.getElementById('fullNameError'), 
+                    validators.fullName
+                );
+                
+                const isEmailValid = validateField(
+                    document.getElementById('email'), 
+                    document.getElementById('emailError'), 
+                    validators.email
+                );
+                
+                const isTopicValid = validateField(
+                    document.getElementById('topic'), 
+                    document.getElementById('topicError'), 
+                    validators.topic
+                );
+                
+                const isMessageValid = validateField(
+                    document.getElementById('message'), 
+                    document.getElementById('messageError'), 
+                    validators.message
+                );
+                
+                const isAgreementValid = validateField(
+                    document.getElementById('agreement'), 
+                    document.getElementById('agreementError'), 
+                    validators.agreement
+                );
+                
+                if (isFullNameValid && isEmailValid && isTopicValid && 
+                    isMessageValid && isAgreementValid) {
+                    
+                    console.log('Данные формы:', {
+                        fullName: document.getElementById('fullName').value,
+                        email: document.getElementById('email').value,
+                        topic: document.getElementById('topic').value,
+                        message: document.getElementById('message').value,
+                        agreement: document.getElementById('agreement').checked
+                    });
+                    
+                    form.style.display = 'none';
+                    successMessage.style.display = 'block';
+                    
+                    setTimeout(function() {
+                        form.reset();
+                        form.style.display = 'block';
+                        successMessage.style.display = 'none';
+                        
+                        const errorMessages = document.querySelectorAll('.error-message');
+                        errorMessages.forEach(function(error) {
+                            error.style.display = 'none';
+                        });
+                        
+                        const errorFields = document.querySelectorAll('.error');
+                        errorFields.forEach(function(field) {
+                            field.classList.remove('error');
+                        });
+                    }, 3000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
