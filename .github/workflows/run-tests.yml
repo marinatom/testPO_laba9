@@ -1,4 +1,4 @@
-name: Run UI Tests
+name: lab9
 
 on:
   push:
