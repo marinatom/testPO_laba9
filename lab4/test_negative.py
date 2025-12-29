@@ -6,8 +6,6 @@ class TestNegative:
     
     def test_empty(self, driver):
         from contact_page import ContactPage
-
-        print(f"Используем URL: {self.URL}")
         
         page = ContactPage(driver, self.URL)
         page.open_contact_form()
@@ -27,4 +25,3 @@ class TestNegative:
         
         assert page.is_element_visible(page.EMAIL_ERROR)
         assert not page.is_element_visible(page.SUCCESS_MESSAGE)
-
