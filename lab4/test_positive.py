@@ -1,28 +1,22 @@
 import time
+import os
 
 class TestPositive:
-    URL = "file://" + __file__.replace("test_positive.py", "contact_form.html")
+    # Используем относительный путь
+    URL = "file://" + os.path.join(os.path.dirname(os.path.abspath(__file__)), "contact_form.html")
     
     def test_successful(self, driver):
-        # Отладочный код
-        print(f"Открываем URL: {self.URL}")
-        driver.get(self.URL)
-        time.sleep(2)  # Ждем загрузки
-        
-        # Проверяем, что страница загрузилась
-        print(f"Текущий URL: {driver.current_url}")
-        print(f"Заголовок страницы: {driver.title}")
-        print(f"Содержимое страницы (первые 500 символов): {driver.page_source[:500]}")
-        
         from contact_page import ContactPage
-        page = ContactPage(driver, self.URL)
-
-class TestPositive:
-    URL = "file:///C:/Users/Серёжа/Desktop/lab4/contact_form.html"
-    def test_successful(self, driver):
-        from contact_page import ContactPage
+        
+        # Отладка: проверим URL
+        print(f"Используем URL: {self.URL}")
+        
         page = ContactPage(driver, self.URL)
         page.open_contact_form()
+        
+        # Проверим, что страница загрузилась
+        print(f"Текущий URL: {driver.current_url}")
+        print(f"Заголовок страницы: {driver.title}")
         
         test_data = {
             "full_name": "Иванов Иван Иванович",
@@ -31,10 +25,13 @@ class TestPositive:
             "message": "Сообщение о проблеме",
             "agreement": True
         }
+        
         page.fill_all(test_data)
         time.sleep(1)
         page.submit_form()
         time.sleep(2)
-
+        
+        assert page.is_element_visible(page.SUCCESS_MESSAGE)
 
         assert page.is_element_visible(page.SUCCESS_MESSAGE)
+
