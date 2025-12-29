@@ -5,15 +5,14 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:  # Позволяет запускать вручную
 
 jobs:
   test:
     runs-on: ubuntu-latest
     
     steps:
-    # 1. Загружаем код из репозитория
-    - name: Checkout repository
+    # 1. Загружаем код
+    - name: Checkout code
       uses: actions/checkout@v4
     
     # 2. Устанавливаем Python
@@ -22,24 +21,13 @@ jobs:
       with:
         python-version: '3.10'
     
-    # 3. Устанавливаем зависимости Python
-    - name: Install Python dependencies
+    # 3. Устанавливаем зависимости
+    - name: Install dependencies
       run: |
-        pip install --upgrade pip
-        pip install pytest selenium
+        pip install pytest selenium webdriver-manager
     
-    # 4. Устанавливаем Chrome для UI-тестов
-    - name: Setup Chrome
-      uses: browser-actions/setup-chrome@v1
-      with:
-        chrome-version: 'stable'
-    
-    # 5. Запускаем позитивные тесты
-    - name: Run positive tests
+    # 4. Используем webdriver-manager для автоматической установки ChromeDriver
+    - name: Run tests with webdriver-manager
       run: |
-        python -m pytest lab4/test_positive.py -v
-    
-    # 6. Запускаем негативные тесты
-    - name: Run negative tests
-      run: |
-        python -m pytest lab4/test_negative.py -v
+        echo "Запуск тестов с webdriver-manager..."
+        python -m pytest lab4/ -v
