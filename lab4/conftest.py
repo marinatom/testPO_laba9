@@ -13,31 +13,28 @@ def driver():
     chrome_options = Options()
     
     # ОБЯЗАТЕЛЬНЫЕ настройки для GitHub Actions:
-    chrome_options.add_argument("--headless")  # Без графического интерфейса
-    chrome_options.add_argument("--no-sandbox")  # Требуется в CI среде
-    chrome_options.add_argument("--disable-dev-shm-usage")  # Требуется в CI
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
     
-    # Дополнительные настройки для стабильности:
+    # Дополнительные настройки:
     chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument("--disable-gpu")  # Для headless режима
-    chrome_options.add_argument("--disable-extensions")
-    chrome_options.add_argument("--disable-infobars")
+    chrome_options.add_argument("--disable-gpu")
     
-    # Автоматическая установка правильной версии ChromeDriver
+    # Автоматическая установка ChromeDriver
     service = Service(ChromeDriverManager().install())
     
     # Создаем драйвер
     driver = webdriver.Chrome(service=service, options=chrome_options)
-    driver.implicitly_wait(10)  # Неявное ожидание
+    driver.implicitly_wait(10)
     
     yield driver
     
-    # Закрываем драйвер после теста
+    # Закрываем драйвер
     driver.quit()
 
-@pytest.fixture
-def contact_form_url():
-    """Фикстура для получения URL тестовой формы в GitHub Actions"""
-    # В GitHub Actions используем относительный путь
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    return f"file://{current_dir}/contact_form.html"
+# УДАЛИТЕ эту фикстуру или закомментируйте, если не используется
+# @pytest.fixture
+# def contact_form_url():
+#     current_dir = os.path.dirname(os.path.abspath(__file__))
+#     return f"file://{current_dir}/contact_form.html"
