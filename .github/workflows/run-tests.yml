@@ -1,0 +1,45 @@
+name: Run UI Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # Позволяет запускать вручную
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 1. Загружаем код из репозитория
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    # 2. Устанавливаем Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    # 3. Устанавливаем зависимости Python
+    - name: Install Python dependencies
+      run: |
+        pip install --upgrade pip
+        pip install pytest selenium
+    
+    # 4. Устанавливаем Chrome для UI-тестов
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: 'stable'
+    
+    # 5. Запускаем позитивные тесты
+    - name: Run positive tests
+      run: |
+        python -m pytest lab4/test_positive.py -v
+    
+    # 6. Запускаем негативные тесты
+    - name: Run negative tests
+      run: |
+        python -m pytest lab4/test_negative.py -v
