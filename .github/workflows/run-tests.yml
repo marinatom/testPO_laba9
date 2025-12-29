@@ -3,31 +3,24 @@ name: Run UI Tests
 on:
   push:
     branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     
     steps:
-    # 1. Загружаем код
     - name: Checkout code
       uses: actions/checkout@v4
-    
-    # 2. Устанавливаем Python
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-    
-    # 3. Устанавливаем зависимости
+
     - name: Install dependencies
       run: |
         pip install pytest selenium webdriver-manager
-    
-    # 4. Используем webdriver-manager для автоматической установки ChromeDriver
+
     - name: Run tests with webdriver-manager
       run: |
-        echo "Запуск тестов с webdriver-manager..."
         python -m pytest lab4/ -v
