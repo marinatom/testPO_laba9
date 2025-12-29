@@ -2,13 +2,11 @@ import time
 import os
 
 class TestNegative:
-    # Используем относительный путь
     URL = "file://" + os.path.join(os.path.dirname(os.path.abspath(__file__)), "contact_form.html")
     
     def test_empty(self, driver):
         from contact_page import ContactPage
-        
-        # Отладка
+
         print(f"Используем URL: {self.URL}")
         
         page = ContactPage(driver, self.URL)
@@ -29,3 +27,4 @@ class TestNegative:
         
         assert page.is_element_visible(page.EMAIL_ERROR)
         assert not page.is_element_visible(page.SUCCESS_MESSAGE)
+
