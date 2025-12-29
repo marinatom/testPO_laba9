@@ -2,21 +2,13 @@ import time
 import os
 
 class TestPositive:
-    # Используем относительный путь
     URL = "file://" + os.path.join(os.path.dirname(os.path.abspath(__file__)), "contact_form.html")
     
     def test_successful(self, driver):
         from contact_page import ContactPage
         
-        # Отладка: проверим URL
-        print(f"Используем URL: {self.URL}")
-        
         page = ContactPage(driver, self.URL)
         page.open_contact_form()
-        
-        # Проверим, что страница загрузилась
-        print(f"Текущий URL: {driver.current_url}")
-        print(f"Заголовок страницы: {driver.title}")
         
         test_data = {
             "full_name": "Иванов Иван Иванович",
@@ -32,6 +24,4 @@ class TestPositive:
         time.sleep(2)
         
         assert page.is_element_visible(page.SUCCESS_MESSAGE)
-
         assert page.is_element_visible(page.SUCCESS_MESSAGE)
-
