@@ -3,15 +3,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
 class ContactPage(BasePage):
-    # Проверьте эти локаторы!
     FULL_NAME_INPUT = (By.ID, "fullName")
     EMAIL_INPUT = (By.ID, "email")
     TOPIC_SELECT = (By.ID, "topic")
     MESSAGE_TEXTAREA = (By.ID, "message")
     AGREEMENT_CHECKBOX = (By.ID, "agreement")
     SUBMIT_BUTTON = (By.CSS_SELECTOR, "button[type='submit']")
-    
-    # Локаторы сообщений об ошибках
+
     FULL_NAME_ERROR = (By.ID, "fullNameError")
     EMAIL_ERROR = (By.ID, "emailError")
     TOPIC_ERROR = (By.ID, "topicError")
@@ -23,7 +21,7 @@ class ContactPage(BasePage):
         super().__init__(driver, url)
     
     def open_contact_form(self):
-        self.driver.get(self.url)  # Просто открываем URL
+        self.driver.get(self.url)  
     
     def enter_full_name(self, full_name):
         element = self.find_element(self.FULL_NAME_INPUT, timeout=10)
@@ -91,3 +89,4 @@ class ContactPage(BasePage):
             self.check_agreement()
         else:
             self.uncheck_agreement()
+
