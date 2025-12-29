@@ -78,8 +78,6 @@ class ContactPage(BasePage):
             print(f"Элемент {self.SUBMIT_BUTTON} не найден!")
     
     def fill_all(self, data):
-        """Заполнить все поля формы"""
-        print(f"Заполняем форму данными: {data}")
         self.enter_full_name(data.get("full_name", ""))
         self.enter_email(data.get("email", ""))
         self.select_topic(data.get("topic", "general"))
@@ -89,4 +87,5 @@ class ContactPage(BasePage):
             self.check_agreement()
         else:
             self.uncheck_agreement()
+
 
